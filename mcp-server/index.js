@@ -6,16 +6,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ⚠️ URL DE TU STRAPI
-const STRAPI_URL = "http://localhost:1337";
+// ✅ URL de Strapi desde variable de entorno (Render / ngrok)
+const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
 
 // ✅ 1. LEER USUARIOS DESDE STRAPI
 app.get("/mcp/usuarios", async (req, res) => {
   try {
-    const response = await fetch(`${STRAPI_URL}/api/usuarios`);
+    const response = await fetch(`${STRAPI_URL}/api/usuarios`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true"
+      }
+    });
+
     const data = await response.json();
     res.json(data);
   } catch (error) {
+    console.error("Error al consultar Strapi:", error);
     res.status(500).json({ error: "Error al consultar Strapi" });
   }
 });
@@ -29,6 +35,7 @@ app.post("/mcp/usuarios", async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true"
       },
       body: JSON.stringify({
         data: {
@@ -41,14 +48,14 @@ app.post("/mcp/usuarios", async (req, res) => {
     const data = await response.json();
     res.json(data);
   } catch (error) {
+    console.error("Error al crear usuario en Strapi:", error);
     res.status(500).json({ error: "Error al crear usuario en Strapi" });
   }
 });
 
-// ✅ ARRANCAR SERVIDOR MCP
+// ✅ ARRANCAR SERVIDOR MCP (Render asigna el puerto)
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
   console.log(`✅ Servidor MCP activo en puerto ${PORT}`);
 });
-
