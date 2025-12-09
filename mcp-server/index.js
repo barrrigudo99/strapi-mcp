@@ -6,7 +6,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ URL de Strapi desde variable de entorno (Render / ngrok)
+// ✅ ENDPOINT RAÍZ PARA CHATGPT
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    service: "Strapi MCP",
+    version: "1.0.0"
+  });
+});
+
+// ✅ URL de Strapi
 const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
 
 // ✅ 1. LEER USUARIOS DESDE STRAPI
