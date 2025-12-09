@@ -46,6 +46,9 @@ app.post("/mcp/usuarios", async (req, res) => {
 });
 
 // ✅ ARRANCAR SERVIDOR MCP
-app.listen(4000, () => {
-  console.log("✅ Servidor MCP activo en http://localhost:4000");
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Servidor MCP activo en puerto ${PORT}`);
 });
+
